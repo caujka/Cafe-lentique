@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import Image
-import sys
+import os.path
 import optparse
 
 parser = optparse.OptionParser()
@@ -13,7 +13,7 @@ parser.add_option("-s", dest="shift", type='int',
 
 (options, args) = parser.parse_args()
 
-files = args.sort()
+files = sorted(args)
 total_shift = options.shift
 
 print "Cropping files:"
@@ -27,6 +27,8 @@ for i in xrange(len(files)):
 
     (width, height) = src_img.size
 
-    dest_img = src_img.crop((offset, 0, width - total_offset + offset, height))
+    dest_img = src_img.crop((offset, 0, width - total_shift + offset, height))
 
-    dest_img.save(options.prefix + files[i], src_img.format)
+    path,name = os.path.split(files[i])
+
+    dest_img.save(os.path.join(path, options.prefix + name), src_img.format)
