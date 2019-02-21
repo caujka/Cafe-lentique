@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
-import Image
+from PIL import Image
 import os.path
 import optparse
 
@@ -16,19 +16,19 @@ parser.add_option("-s", dest="shift", type='int',
 files = sorted(args)
 total_shift = options.shift
 
-print "Cropping files:"
+print("Cropping files:")
 
-for i in xrange(len(files)):
-    print files[i]
+for i, file_name in enumerate(files):
+    print(file_name)
 
-    offset = total_shift * i / len(files)
+    offset = total_shift * i // len(files)
 
-    src_img = Image.open(files[i])
+    src_img = Image.open(file_name)
 
     (width, height) = src_img.size
 
     dest_img = src_img.crop((offset, 0, width - total_shift + offset, height))
 
-    path,name = os.path.split(files[i])
+    path, name = os.path.split(file_name)
 
     dest_img.save(os.path.join(path, options.prefix + name), src_img.format)
